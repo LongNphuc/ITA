@@ -1,3 +1,5 @@
+package controllerr;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +14,7 @@ public class IndexController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        request.getSession().setAttribute("loginGoogleURL", constant.Constant.GOOGLE_URL_LOGIN);
         request.getRequestDispatcher("langdingPage.jsp").forward(request, response);
     } 
 
