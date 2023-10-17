@@ -1,6 +1,6 @@
 package controller.auth;
 
-//import dao.UserDAO;
+import dao.UserDAO;
 import java.io.IOException;
 
 import dto.UserGoogleDTO;
@@ -11,6 +11,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Role;
+import model.User;
+import utils.Mail;
 
 @WebServlet(name = "LoginGoogleController", urlPatterns = {"/LoginGoogleController"})
 public class LoginGoogleController extends HttpServlet {
@@ -23,27 +26,24 @@ public class LoginGoogleController extends HttpServlet {
 
         UserGoogleDTO userInfo = Helper.getUserInfo(accessToken);
         System.out.println(userInfo);
-//        UserDAO userDao = new UserDAO();
-//        if (!userInfo.getEmail().endsWith("@fpt.edu.vn")) {
-//            request.getSession().setAttribute("log", "Only @fpt.edu.vn emails.");
-//            response.sendRedirect("./login");
-//            return;
-//        } else if (!userDao.isUserExist(UserDAO.LOGIN_EMAIL, userInfo.getEmail())) {
-//            request.getSession().setAttribute("log", "Account not registered. Contact admin");
-//            response.sendRedirect("./login");
-//            return;
-//        } else {
-//           if( userDao.getUserForgotPass(userInfo.getEmail()).getOauthId().equals("null")){
-//            userDao.updateGoogleUser(userInfo.getEmail(), userInfo.getId(),
-//                    userInfo.getName(), userInfo.getPicture());
-//            }
-//            request.getSession().setAttribute("user",
-//                    userDao.getUser(UserDAO.LOGIN_EMAIL, userInfo.getEmail()));
-//            response.sendRedirect(request.getContextPath());
-//            return;
-//        }
-
+        User user = new UserDAO().getUser(UserDAO.LOGIN_EMAIL, userInfo.getEmail());
+        request.getSession().setAttribute("roleTeacher", Role.ROLE_TEACHER);
+        request.getSession().setAttribute("roleStudent", Role.ROLE_STUDENT);
+        request.getSession().setAttribute("roleAdmin", Role.ROLE_ADMIN);
         
+        if (user == null) {
+            String verifyEmailCaptcha = Helper.getRandomNumberString();
+            Mail.send(userInfo.getEmail(), "Verify Email", "Your verify code: " + verifyEmailCaptcha);
+            request.setAttribute("verifyCode", verifyEmailCaptcha);
+            request.getSession().setAttribute("userInfo", userInfo);
+            request.getRequestDispatcher("otp-verifyEmail.jsp").forward(request, response);
+        } else {
+             if(user.getOauthId() == null) {
+                 new UserDAO().updateGoogleUser(user.getUserId(), user.getOauthId(), user.getFullName(), user.getImage());
+             }request.getSession().setAttribute("user", user);
+            request.getRequestDispatcher("projectDashboard.jsp").forward(request, response);
+        }
+
     }
 
     @Override

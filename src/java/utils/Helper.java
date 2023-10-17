@@ -141,14 +141,14 @@ public class Helper {
 //        return null;
 //    }
 //
-//    public static Timestamp getCurrentTimestamp() {
-//        try {
-//            return new Timestamp(new Date().getTime());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public static Timestamp getCurrentTimestamp() {
+        try {
+            return new Timestamp(new Date().getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     
     public static int convertTime(String time) {
         String timePart[] = time.split(":");
