@@ -29,7 +29,7 @@
     </head>
 
     <body class="">
-        <%@include file="component/header-authen.jsp" %>
+        <%@include file="../component/header-authen.jsp" %>
         <main class="main-content  mt-0">
             <section>
                 <div class="page-header min-vh-100">
@@ -79,7 +79,7 @@
             if (win && document.querySelector('#sidenav-scrollbar')) {
                 var options = {
                     damping: '0.5'
-                }
+                };
                 Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
             }
 
@@ -89,7 +89,7 @@
                 var inputOtp = document.getElementById('verifyCode').value;
                 var OTP = '<%=  request.getAttribute("verifyCode")%>';
                 if (inputOtp === OTP) {
-                    window.location.href = 'register';
+                    window.location.href = 'register?fillInfor=true';
                 } else {
                     document.getElementById('fl-otp-feedback').style.color = 'red';
                     document.getElementById('fl-otp-feedback').style.display = 'block';

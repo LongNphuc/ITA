@@ -15,19 +15,19 @@
                     <div class="collapse navbar-collapse" id="navigation">
                         <ul class="navbar-nav mx-auto">
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center me-2 active" aria-current="page" href="#">
+                                <a class="nav-link d-flex align-items-center me-2 active" aria-current="page" href="${pageContext.request.contextPath}">
                                     <i class="fa fa-chart-pie opacity-6 text-dark me-1"></i>
                                     HOME
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link me-2" href="sign-up">
+                                <a class="nav-link me-2" href="sign-up.jsp">
                                     <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
                                     Sign Up
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link me-2" href="sign-in">
+                                <a class="nav-link me-2" href="sign-in.jsp">
                                     <i class="fas fa-key opacity-6 text-dark me-1"></i>
                                     Sign In
                                 </a>

@@ -120,8 +120,8 @@
         </div>
     </div>
     <div class="buttons">
-        <a href="sign-up.jsp" class="button">Sign Up</a>
-        <button class="button">Sign In</button>
+        <a href="register" class="button">Sign Up</a>
+        <a href="LoginGoogleController?signin=true" class="button">Sign In</a>
     </div>
 </body>
 </html>

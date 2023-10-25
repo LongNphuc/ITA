@@ -26,7 +26,7 @@
         <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
     </head>
     <body class="">
-        <%@include file="component/header-authen.jsp" %>
+        <%@include file="../component/header-authen.jsp" %>
         <main class="main-content  mt-0">
             <section>
                 <div class="page-header min-vh-100">
@@ -44,38 +44,36 @@
                                     </div>
                                     <div class="card-body">
                                         <form action="register" method="post" id="user-register">
-                                        <div class="input-group input-group-outline mb-3">
-                                            <input name="mobile" id="mobile" type="number" class="form-control" id="floatingInput" placeholder="Your Mobile" required>
-                                        </div>
-                                        <p id="fl-mobile-feedback" class="error-message" style="display: none;color: red">InValid Mobile! Try Again! </p>
-                                        <div class="input-group input-group-outline mb-3">
-                                            <input name="mobile" id="password" type="text" class="form-control" id="floatingInput" placeholder="Your Password" required>
-                                        </div>
-                                        <p id="fl-password-feedback" class="error-message" style="display: none;color: red">Password needed start with UpperCharacter and need contains one special character </p>
-                                        <div class="input-group input-group-outline mb-3">
-                                            <fieldset class="row accordion-body">
-                                                <legend class="col-form-label col-10 pt-0">You are </legend>
-                                                <div class="col-10">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="role"
-                                                               id="gridRadios1" value="${sessionScope.roleTeacher}" checked>
-                                                        <label class="form-check-label" for="gridRadios1">
-                                                            Teacher
-                                                        </label>
+                                            <input type="hidden" name="flag" value="${flag}">
+                                            <input type="hidden" name="mobile" value="${mobile}">
+                                            <div class="input-group input-group-outline mb-3">
+                                                <input name="password" id="password" type="text" class="form-control" id="floatingInput" placeholder="Your Password" required>
+                                            </div>
+                                            <p id="fl-password-feedback" class="error-message" style="display: none;color: red">Password needed start with UpperCharacter and need contains one special character </p>
+                                            <div class="input-group input-group-outline mb-3">
+                                                <fieldset class="row accordion-body">
+                                                    <legend class="col-form-label col-10 pt-0">You are </legend>
+                                                    <div class="col-10">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="role"
+                                                                   id="gridRadios1" value="${sessionScope.roleTeacher}" checked>
+                                                            <label class="form-check-label" for="gridRadios1">
+                                                                Teacher
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="role"
+                                                                   id="gridRadios2" value="${sessionScope.roleStudent}">
+                                                            <label class="form-check-label" for="gridRadios2">
+                                                                Student
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="role"
-                                                               id="gridRadios2" value="${sessionScope.roleStudent}">
-                                                        <label class="form-check-label" for="gridRadios2">
-                                                            Student
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
-                                        </div>
+                                                </fieldset>
+                                            </div>
                                         </form>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0" onclick="checkMobile()">Register</button>
+                                            <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0" onclick="checkPassword()">Register</button>
                                         </div>
                                     </div>
                                     <div class="card-footer text-center pt-0 px-lg-2 px-1">
@@ -108,16 +106,13 @@
 
         </script>
         <script>
-            function checkMobile(){
-                var mobile = document.getElementById('mobile').value;
+            function checkPassword() {
                 var password = document.getElementById('password').value;
                 const patterPassword = /^(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
                 console.log(patterPassword.test(password));
-                if(mobile.length !== 10) {
-                    document.getElementById('fl-mobile-feedback').style.display = 'block';
-                }else if(!patterPassword.test(password)){
-                     document.getElementById('fl-password-feedback').style.display = 'block';
-                }else {
+                if (!patterPassword.test(password)) {
+                    document.getElementById('fl-password-feedback').style.display = 'block';
+                } else {
                     document.getElementById('user-register').submit();
                 }
             }

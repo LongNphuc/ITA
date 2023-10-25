@@ -17,11 +17,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 public class Helper {
 
@@ -97,50 +101,7 @@ public class Helper {
         return email.split("@")[0];
     }
 
-//    public static ArrayList<Integer> getTotalElementOfPage(String object, String keyValue, String userId) {
-//        int numOfElementAtPage = Integer.parseInt(Helper.getPropertiesByFileName("constant/const.properties").getProperty("number" + object + "OfPage"));
-//        int totalPage = new ClassDAO().getTotalOfPage(numOfElementAtPage, keyValue, object, userId);
-//        ArrayList<Integer> list = new ArrayList<>();
-//        for (int i = 1; i <= totalPage; i++) {
-//            list.add(i);
-//        }
-//        return list;
-//    }
 
-//    public static HashMap<ArrayList<Object>, Integer> getListAndIndex(String index, int listPageSize, String object, String keyValue, String userId) {
-//        HashMap<ArrayList<Object>, Integer> hashmap = new HashMap<>();
-//        ArrayList<Object> objectList = new ArrayList<>();
-//        int indexMap = 1;
-//        int numElementOfPage = Integer.parseInt(Helper.getPropertiesByFileName("constant/const.properties").getProperty("number" + object + "OfPage"));
-//        if (index == null || listPageSize == 1) {
-//            objectList.addAll(new CourseDAO().getAllObjectByPage(1, numElementOfPage, keyValue, object, userId));
-//        } else {
-//            indexMap = Integer.parseInt(index);
-//            if (indexMap > listPageSize) {
-//                indexMap = listPageSize;
-//            }
-//            objectList.addAll(new CourseDAO().getAllObjectByPage(indexMap, numElementOfPage, keyValue, object, userId));
-//        }
-//        hashmap.put(objectList, indexMap);
-//        return hashmap;
-//    }
-
-//    public static String getKeyWordSearch(String object) {
-//        return (object.equals("User") ? "Username like ? or Email like ? or FullName like ?"
-//                : ((object.equals("Class") ? "ClassName like ? or ClassCode like ? or CourseCode like ?"
-//                : "CourseCode like ? or CourseName like ?")));
-//    }
-//
-//    public static Timestamp getTimestampFromString(String date) {
-//        try {
-//            return new Timestamp(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
-//                    .parse(date).getTime());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
     public static Timestamp getCurrentTimestamp() {
         try {
             return new Timestamp(new Date().getTime());
@@ -154,5 +115,44 @@ public class Helper {
         String timePart[] = time.split(":");
         int timeCovert = (Integer.parseInt(timePart[0]) * 60 + Integer.parseInt(timePart[1])) * 60 + Integer.parseInt(timePart[2]);
         return timeCovert;
+    }
+    
+    public static String encryptPassword(String password) throws Exception {
+        Properties prop = getPropertiesByFileName("constant/const.properties");
+        String key = prop.getProperty("secretIsSecret");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+        IvParameterSpec iv = new IvParameterSpec(key.getBytes("UTF-8"));
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, iv);
+
+        byte[] encryptedBytes = cipher.doFinal(password.getBytes());
+        return Base64.encodeBase64String(encryptedBytes);
+    }
+
+    public static String decryptPassword(String encryptedPassword) throws Exception {
+        Properties prop = getPropertiesByFileName("constant/const.properties");
+        String key = prop.getProperty("secretIsSecret");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+        IvParameterSpec iv = new IvParameterSpec(key.getBytes("UTF-8"));
+        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, iv);
+
+        byte[] encryptedBytes = Base64.decodeBase64(encryptedPassword);
+        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+        return new String(decryptedBytes);
+    }
+
+    public static void main(String[] args) {
+        try {
+            String password = "Long240303@1";
+
+            String encryptedPassword = encryptPassword(password);
+            System.out.println("Encrypted Password: " + encryptedPassword);
+
+//            String decryptedPassword = decryptPassword("u4yTLWE/0W37zJGy/arE0w==");
+//            System.out.println("Decrypted Password: " + decryptedPassword);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -5,14 +5,22 @@ import java.sql.Timestamp;
 public class User {
 
     private int userId;
-    private String mobile,accountName, password, oauthId, email;
+    private String mobile, accountName, password, oauthId, email;
     private Role role;
     private String fullName, image;
     private Semester semester;
     private Timestamp dateCreated;
     private byte isActive;
-    
-    public User(int userId, String email,String mobile , String password, String oauthId, Role role,String accountName,String fullName, String image,Timestamp dateCreated,byte isActived) {
+
+    public User() {
+    }
+
+    public User(int userId, Role role) {
+        this.userId = userId;
+        this.role = role;
+    }
+
+    public User(int userId, String email, String mobile, String password, String oauthId, Role role, String accountName, String fullName, String image, Timestamp dateCreated, byte isActived) {
         this.userId = userId;
         this.mobile = mobile;
         this.accountName = accountName;
@@ -26,7 +34,7 @@ public class User {
         this.isActive = isActived;
     }
 
-    public User(int userId, String email,String mobile , String password, String oauthId, Role role,String accountName,String fullName, String image,Semester semester,Timestamp dateCreated,byte isActived) {
+    public User(int userId, String email, String mobile, String password, String oauthId, Role role, String accountName, String fullName, String image, Semester semester, Timestamp dateCreated, byte isActived) {
         this.userId = userId;
         this.mobile = mobile;
         this.accountName = accountName;
@@ -58,9 +66,9 @@ public class User {
     }
 
     public String getEmail() {
-        try{
+        try {
             return (!email.equals("null") ? this.email = email : "");
-        }catch(Exception e) {
+        } catch (Exception e) {
             return "";
         }
     }
@@ -68,7 +76,7 @@ public class User {
     public Role getRole() {
         return role;
     }
-  
+
     public String getFullName() {
         return fullName;
     }
@@ -80,7 +88,7 @@ public class User {
     public Semester getSemester() {
         return semester;
     }
-    
+
     public Timestamp getDateCreated() {
         return dateCreated;
     }
@@ -88,7 +96,7 @@ public class User {
     public byte getIsActive() {
         return isActive;
     }
-    
+
     public String getIsActiveString() {
         return (isActive == 0) ? "False" : "True";
     }
@@ -96,6 +104,5 @@ public class User {
     public String getMobile() {
         return mobile;
     }
-    
-    
+
 }
